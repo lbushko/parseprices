@@ -49,17 +49,17 @@ public class SignalHalmarInUa extends BasePage{
                        price = driver.findElement(price_locator);
                    }
                    catch (NoSuchElementException y){
-                       System.out.println("No price provided");
+                       System.out.println("No price provided: "+item+" ("+URL+")");
                    }
                }
                catch (NoSuchElementException k){
-                   System.out.println("No such element");
+                   System.out.println("No such element: "+item+" ("+URL+")");
                }
            }
        }
-       String ss = price.getAttribute("innerText").replace(",",".");
-       Double itemPriece = Double.parseDouble(ss.replace(" ",""));
-       System.out.println(itemPriece);
-       return itemPriece;
+       String ss = price.getAttribute("innerText")
+               .replace(",",".")
+               .replaceAll("\\s","");
+       return Double.parseDouble(ss);
    }
 }

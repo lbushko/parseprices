@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,13 +19,15 @@ public class HalmarComUa extends BasePage{
 
     private static WebElement livesearch;
 
-    private By livesearchLocator = By.cssSelector("#livesearch_search_results > li[1] > a");
+    private By livesearchLocator = By.xpath("/html/body/div[@id='container']/div[@id='header']/div[@id='search']/ul[@id='livesearch_search_results']/li[1]");
 
     //"/html/body/div[@id='container']/div[@id='header']/div[@id='search']/ul[@id='livesearch_search_results']/li[1]/a"
 
     private WebElement price;
 
-    private By priceLocator = By.xpath("//*[@id=\"obvodka-buy\"]/span/text()");
+    private By priceLocator = By.xpath("/html/body/div[@id='container']/div[@id='content']/div[@class='product-info']/div[@class='right']/div[@class='price']/div[@id='obvodka-buy']");
+
+    WebDriverWait wait = new WebDriverWait(driver,10);
 
     public void getPage(){
         driver.get(URL);
@@ -34,12 +37,18 @@ public class HalmarComUa extends BasePage{
         search = driver.findElement(searchLocator);
         search.click();
         search.sendKeys(item);
-        livesearch = driver.findElement(livesearchLocator);
+        livesearch = wait.until(ExpectedConditions.elementToBeClickable(livesearchLocator));
         livesearch.click();
-        price = driver.findElement(priceLocator);
-        String ss = price.getAttribute("innerText").replace(",",".");
-        Double itemPriece = Double.parseDouble(ss.replace(" ",""));
-        System.out.println(itemPriece);
-        return itemPriece;
+        try {
+            price = driver.findElement(priceLocator);
+        }
+        catch (NoSuchElementException e){
+            System.out.println("No such element: "+item+" ("+URL+")");
+        }
+        String ss = price.getAttribute("innerText")
+                .replace(",",".")
+                .replace("грн", "")
+                .replaceAll("\\s+","");
+        return Double.parseDouble(ss);
     }
 }

@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -31,10 +32,15 @@ public class Lvivmeblicom extends BasePage {
         search.sendKeys(item);
         searchButton = driver.findElement(searchButtonLocator);
         searchButton.click();
-        price = driver.findElement(priceLocator);
-        String ss = price.getAttribute("innerText").replace(",",".");
-        Double itemPriece = Double.parseDouble(ss.replace(" ",""));
-        System.out.println(itemPriece);
-        return itemPriece;
+        try {
+            price = driver.findElement(priceLocator);
+        }
+        catch (NoSuchElementException e){
+            System.out.println("No such element: "+item+" ("+URL+")");
+        }
+        String ss = price.getAttribute("innerText")
+                .replace(",", ".")
+                .replaceAll("\\s","");
+        return Double.parseDouble(ss);
     }
 }
