@@ -1,9 +1,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="All-tests">
+<suite name="All-tests" parallel="classes" thread-count="4">
     <test name="all">
         <classes>
             <class name="SignalHalmarIUaTest"></class>
             <class name="LvivmeblicomTest"></class>
+            <!--<class name="HalmarComUaTest"></class>-->
+            <class name="BrwLandComUaTest"></class>
+            <class name="HalmarLvivUaTest"></class>
         </classes>
     </test>
 </suite>

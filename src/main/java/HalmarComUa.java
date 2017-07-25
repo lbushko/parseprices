@@ -5,19 +5,21 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class HalmarComUa extends BasePage{
+public class HalmarComUa {
 
-    public HalmarComUa(WebDriver driver){
-        super(driver);
+    protected static WebDriver driver;
+
+    public HalmarComUa(WebDriver driver) {
+        this.driver = driver;
     }
 
     private static String URL = "http://halmar.com.ua/";
 
-    private static WebElement search;
+    private WebElement search;
 
-    private By searchLocator = By.xpath("/html/body/div[@id='container']/div[@id='header']/div[@id='search']/input");
+    private By searchLocator = By.xpath("//*[@id=\"search\"]/input");
 
-    private static WebElement livesearch;
+    private WebElement livesearch;
 
     private By livesearchLocator = By.xpath("/html/body/div[@id='container']/div[@id='header']/div[@id='search']/ul[@id='livesearch_search_results']/li[1]");
 
@@ -25,9 +27,9 @@ public class HalmarComUa extends BasePage{
 
     private WebElement price;
 
-    private By priceLocator = By.xpath("/html/body/div[@id='container']/div[@id='content']/div[@class='product-info']/div[@class='right']/div[@class='price']/div[@id='obvodka-buy']");
+    private By priceLocator = By.xpath("/html/body/div[@id='container']/div[@id='content']/div[@class='product-info']/div[@class='right']/div[@class='price']/div[@id='obvodka-buy']/span");
 
-    WebDriverWait wait = new WebDriverWait(driver,10);
+    //WebDriverWait wait = new WebDriverWait(driver,10);
 
     public void getPage(){
         driver.get(URL);
@@ -35,9 +37,10 @@ public class HalmarComUa extends BasePage{
 
     public Double getPrice(String item){
         search = driver.findElement(searchLocator);
-        search.click();
+        //search.click();
         search.sendKeys(item);
-        livesearch = wait.until(ExpectedConditions.elementToBeClickable(livesearchLocator));
+        //livesearch = wait.until(ExpectedConditions.elementToBeClickable(livesearchLocator));
+        livesearch = driver.findElement(livesearchLocator);
         livesearch.click();
         try {
             price = driver.findElement(priceLocator);

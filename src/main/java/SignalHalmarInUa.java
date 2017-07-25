@@ -3,7 +3,13 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class SignalHalmarInUa extends BasePage{
+public class SignalHalmarInUa{
+
+    protected static WebDriver driver;
+
+    public Lvivmeblicom(WebDriver driver) {
+        this.driver = driver;
+    }
 
     private static String URL = "http://signal-halmar.in.ua/";
 
@@ -20,10 +26,6 @@ public class SignalHalmarInUa extends BasePage{
     private By resultSearchlocator = By.xpath("//ul[@class='tiny_products']/li[@class='product'][1]");
 
     private By price_locator = By.xpath("/html/body/div[@id='page_bg']/div[@id='section-main-content']/div[@id='content-right']/div[@class='product page']/div[@class='product_info']/form[@class='cart']/div[@class='price']/span");
-
-    public SignalHalmarInUa(WebDriver driver){
-        super(driver);
-    }
 
    public void getPage(){
        driver.get(URL);

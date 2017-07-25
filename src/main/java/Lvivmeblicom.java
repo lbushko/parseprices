@@ -3,10 +3,12 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Lvivmeblicom extends BasePage {
+public class Lvivmeblicom{
 
-    public Lvivmeblicom(WebDriver driver){
-        super(driver);
+    protected static WebDriver driver;
+
+    public Lvivmeblicom(WebDriver driver) {
+        this.driver = driver;
     }
 
     private static String URL = "https://lvivmebli.com/ua/";

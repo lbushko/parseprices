@@ -34,7 +34,7 @@
                 <version>2.20</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <webdriver.chrome.driver>/Users/lyubomyr/Desktop/parseprices/chromedriver</webdriver.chrome.driver>
+                        <webdriver.chrome.driver>C:\Users\lbushko\Desktop\parseprices\chromedriver.exe</webdriver.chrome.driver>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
