@@ -7,7 +7,7 @@ public class SignalHalmarInUa{
 
     protected static WebDriver driver;
 
-    public Lvivmeblicom(WebDriver driver) {
+    public SignalHalmarInUa(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -61,6 +61,7 @@ public class SignalHalmarInUa{
        }
        String ss = price.getAttribute("innerText")
                .replace(",",".")
+               .replace("грн", "")
                .replaceAll("\\s","");
        return Double.parseDouble(ss);
    }

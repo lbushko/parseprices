@@ -4,7 +4,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class HalmarLvivUaTest extends BaseTest{
@@ -21,32 +21,11 @@ public class HalmarLvivUaTest extends BaseTest{
         driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
     }
 
-    @Test
-    public void parseItem01(){
+    @Test(dataProvider = "items")
+    public void parseItem(String itemName, HashMap<String, Double> itemMap){
         HalmarLvivUa site = new HalmarLvivUa(driver);
-        Double price = site.getPrice(Items.halmarItem01);
-        halmarItem01.put(Sites.site04,price);
-    }
-
-    @Test
-    public void parseItem02(){
-        HalmarLvivUa site = new HalmarLvivUa(driver);
-        Double price = site.getPrice(Items.halmarItem02);
-        halmarItem02.put(Sites.site04,price);
-    }
-
-    @Test
-    public void parseItem03(){
-        HalmarLvivUa site = new HalmarLvivUa(driver);
-        Double price = site.getPrice(Items.halmarItem03);
-        halmarItem03.put(Sites.site04,price);
-    }
-
-    @Test
-    public void parseItem04(){
-        HalmarLvivUa site = new HalmarLvivUa(driver);
-        Double price = site.getPrice(Items.halmarItem04);
-        halmarItem04.put(Sites.site04,price);
+        Double price = site.getPrice(itemName);
+        itemMap.put(Sites.site04,price);
     }
 
     @AfterClass

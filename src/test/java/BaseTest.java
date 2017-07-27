@@ -2,78 +2,99 @@ import org.testng.annotations.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseTest {
+public class BaseTest extends DataCollect {
 
-    static HashMap<String, Double> halmarItem01 = new HashMap<String, Double>();
-    static HashMap<String, Double> halmarItem02 = new HashMap<String, Double>();
-    static HashMap<String, Double> halmarItem03 = new HashMap<String, Double>();
-    static HashMap<String, Double> halmarItem04 = new HashMap<String, Double>();
-
-
-    public double calcuteAvrg(HashMap<String, Double> map, String brand, String item){
+    public double calcuteAvrg(HashMap<String, Double> map, String brand, String item, double stDeviation){
         double sum=0;
         int count=0;
-        double price_lvivmebli=0;
+        double price_lvivmebli = map.get(Sites.lvivmebli);
         double percent=0;
+
         for (Map.Entry<String, Double> pair: map.entrySet()
                 ) {
-            if(!(pair.getKey().equals(Sites.lvivmebli))) {
-                sum += pair.getValue();
-                count++;
-            }
-            else if(pair.getKey().equals(Sites.lvivmebli)){
-                price_lvivmebli = pair.getValue();
+            double deviation = Math.abs((pair.getValue()/price_lvivmebli) * 100 - 100);
+            deviation = (Math.round(deviation * 100)) / 100;
+
+            if(!(pair.getKey().equals(Sites.lvivmebli)) && deviation < stDeviation) {
+                    sum += pair.getValue();
+                    count++;
             }
         }
+
         double avrg = (sum / count);
-        avrg = (Math.round(avrg * 100)) / 100;
+        avrg = ((Math.round(avrg * 100)) / 100);
+
         if (avrg !=0 && price_lvivmebli !=0) {
             if (price_lvivmebli > avrg) {
                 System.out.println("Наша ціна на товар: " + brand + " - " + item + " більша ніж у конукрентів в середньому на " + (price_lvivmebli - avrg) + " грн +++");
             } else if (price_lvivmebli < avrg) {
                 System.out.println("Наша ціна на товар: " + brand + " - " + item + " нижче ніж у конукрентів в середньому на " + (avrg - price_lvivmebli) + " грн ---");
             }
-            percent = (100 - (price_lvivmebli/avrg) * 100);
+            else if (price_lvivmebli == avrg){
+                System.out.println("Наша ціна на товар: " + brand + " - " + item + " однакова <<<");
+            }
+            percent = ((avrg/price_lvivmebli) * 100) - 100;
             percent = (Math.round(percent * 100)) / 100;
         }
         return percent;
     }
 
-    public void recommendation(double item01, double item02, double item03, double item04, String brand){
-        double avrg = (item01+item02+item03+item04) / 4;
+    public void recommendation(double avrg, String brand){
         String recommendation = "";
-        if (avrg >= 0){
-            if (avrg >0){
-                recommendation = "Наші ціни на бренд - "+brand+" нижчі на "+avrg+" %"+" ---";
+        if (avrg >= 0.0){
+            if (avrg >0.0){
+                recommendation = ">>> Наші ціни на бренд - "+brand+" нижчі на "+avrg+" %"+" ---";
             }
             else {
-                recommendation = "Наші ціни на бренд - "+brand+" однакові "+avrg+" %"+" ;)";
+                recommendation = ">>> Наші ціни на бренд - "+brand+" однакові "+avrg+" %"+" ;)";
             }
         }
-        else if (avrg <0){
-            recommendation = "Наші ціни на бренд - "+brand+" більші на "+(avrg*(-1))+" %";
+        else if (avrg <0.0){
+            recommendation = ">>> Наші ціни на бренд - "+brand+" більші на "+Math.abs(avrg)+" %";
         }
         System.out.println(recommendation);
     }
 
-    public void print(HashMap<String, Double> map, String item){
+    public void print(HashMap<String, Double> map, String item, String brandName){
         for (Map.Entry<String, Double> pair: map.entrySet()
                 ) {
-            System.out.println("Halmar - "+item+" ("+pair.getKey()+")"+" ціна: "+ pair.getValue());
+            System.out.println(brandName+" - "+item+" ("+pair.getKey()+")"+" ціна: "+ pair.getValue());
         }
+    }
+
+    public void analyze(HashMap<HashMap<String, Double>, String> brandMap, String brandName, double stDeviation){
+        double sumPlus=0;
+        int plus=0;
+        double sumMinus=0;
+        int minus=0;
+
+        for (Map.Entry<HashMap<String, Double>, String> entry : brandMap.entrySet()
+                ) {
+            print(entry.getKey(),entry.getValue(),brandName);
+            double avrg = calcuteAvrg(entry.getKey(), brandName, entry.getValue(), stDeviation);
+            if (avrg >= 0){
+                sumPlus += avrg;
+                plus++;
+            }
+            else if (avrg <0){
+                sumMinus += avrg;
+                minus++;
+            }
+        }
+
+        double sumPercent = (sumPlus / plus) + (sumMinus / minus);
+
+        System.out.println("");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        recommendation(sumPercent, brandName);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("");
     }
 
     @AfterSuite
     public void mapsPrint(){
-        print(halmarItem01,Items.halmarItem01);
-        print(halmarItem02,Items.halmarItem02);
-        print(halmarItem03,Items.halmarItem03);
-        print(halmarItem04,Items.halmarItem04);
-
-        recommendation(calcuteAvrg(halmarItem01,Brands.halmar,Items.halmarItem01),
-                calcuteAvrg(halmarItem02,Brands.halmar,Items.halmarItem02),
-                calcuteAvrg(halmarItem03,Brands.halmar,Items.halmarItem03),
-                calcuteAvrg(halmarItem04,Brands.halmar,Items.halmarItem04),
-                Brands.halmar);
+        convertMaps2D();
+        analyze(halmar, Brands.halmar, 40);
+        analyze(signal, Brands.signal, 40);
     }
 }

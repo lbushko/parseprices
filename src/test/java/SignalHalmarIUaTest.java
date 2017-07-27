@@ -4,7 +4,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class SignalHalmarIUaTest extends BaseTest {
@@ -22,36 +22,12 @@ public class SignalHalmarIUaTest extends BaseTest {
         driver.manage().timeouts().implicitlyWait(6,TimeUnit.SECONDS);
     }
 
-    @Test
-    public void parseItem01() throws Exception{
+    @Test(dataProvider = "items")
+    public void parseItem(String itemName, HashMap<String, Double> itemMap) throws Exception{
         SignalHalmarInUa site = new SignalHalmarInUa(driver);
         site.getPage();
-        Double price = site.getPrice(Items.halmarItem01);
-        halmarItem01.put(Sites.site01,price);
-    }
-
-    @Test
-    public void parseItem02() throws Exception{
-        SignalHalmarInUa site = new SignalHalmarInUa(driver);
-        site.getPage();
-        Double price = site.getPrice(Items.halmarItem02);
-        halmarItem02.put(Sites.site01,price);
-    }
-
-    @Test
-    public void parseItem03() throws Exception{
-        SignalHalmarInUa site = new SignalHalmarInUa(driver);
-        site.getPage();
-        Double price = site.getPrice(Items.halmarItem03);
-        halmarItem03.put(Sites.site01,price);
-    }
-
-    @Test
-    public void parseItem04() throws Exception{
-        SignalHalmarInUa site = new SignalHalmarInUa(driver);
-        site.getPage();
-        Double price = site.getPrice(Items.halmarItem04);
-        halmarItem04.put(Sites.site01,price);
+        Double price = site.getPrice(itemName);
+        itemMap.put(Sites.site01,price);
     }
 
     @AfterClass

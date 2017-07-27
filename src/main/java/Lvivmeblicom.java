@@ -42,6 +42,7 @@ public class Lvivmeblicom{
         }
         String ss = price.getAttribute("innerText")
                 .replace(",", ".")
+                .replace("грн", "")
                 .replaceAll("\\s","");
         return Double.parseDouble(ss);
     }
