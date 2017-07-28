@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class BaseTest extends DataCollect {
 
+    /*Рахуємо % відхилення ціни по конкретному товару */
     public Double calcuteAvrg(HashMap<String, Double> map, String brand, String item, double stDeviation){
         double sum = 0;
         int count = 0;
@@ -38,6 +39,7 @@ public class BaseTest extends DataCollect {
         return percent;
     }
 
+    /*Даємо висновок на основі нашого аналізу*/
     public void recommendation(double avrg, String brand){
         String recommendation = "";
 
@@ -55,6 +57,7 @@ public class BaseTest extends DataCollect {
         System.out.println(recommendation);
     }
 
+    /*Друкуємо всі ціни на товар з масиву*/
     public void print(HashMap<String, Double> map, String item, String brandName){
         for (Map.Entry<String, Double> pair: map.entrySet()
                 ) {
@@ -62,6 +65,7 @@ public class BaseTest extends DataCollect {
         }
     }
 
+    /*Розраховуємо середнє відхилення по групі товарів (бренд)*/
     public void analyze(HashMap<HashMap<String, Double>, String> brandMap, String brandName, double stDeviation){
         double sumPercent = 0;
         int count = 0;
