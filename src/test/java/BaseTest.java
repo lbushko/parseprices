@@ -4,11 +4,11 @@ import java.util.Map;
 
 public class BaseTest extends DataCollect {
 
-    public double calcuteAvrg(HashMap<String, Double> map, String brand, String item, double stDeviation){
-        double sum=0;
-        int count=0;
-        double price_lvivmebli = map.get(Sites.lvivmebli);
-        double percent=0;
+    public Double calcuteAvrg(HashMap<String, Double> map, String brand, String item, double stDeviation){
+        double sum = 0;
+        int count = 0;
+        Double price_lvivmebli = map.get(Sites.lvivmebli);
+        Double percent = null;
 
         for (Map.Entry<String, Double> pair: map.entrySet()
                 ) {
@@ -24,33 +24,33 @@ public class BaseTest extends DataCollect {
         double avrg = (sum / count);
         avrg = ((Math.round(avrg * 100)) / 100);
 
-        if (avrg !=0 && price_lvivmebli !=0) {
+        if (avrg !=0.0 && price_lvivmebli != null) {
             if (price_lvivmebli > avrg) {
                 System.out.println("Наша ціна на товар: " + brand + " - " + item + " більша ніж у конукрентів в середньому на " + (price_lvivmebli - avrg) + " грн +++");
             } else if (price_lvivmebli < avrg) {
                 System.out.println("Наша ціна на товар: " + brand + " - " + item + " нижче ніж у конукрентів в середньому на " + (avrg - price_lvivmebli) + " грн ---");
-            }
-            else if (price_lvivmebli == avrg){
-                System.out.println("Наша ціна на товар: " + brand + " - " + item + " однакова <<<");
+            } else if (price_lvivmebli == avrg){
+                System.out.println("Наша ціна на товар: " + brand + " - " + item + " така ж як середня ціна у конкурентів <<<");
             }
             percent = ((avrg/price_lvivmebli) * 100) - 100;
-            percent = (Math.round(percent * 100)) / 100;
         }
+        System.out.println("Відхилення: "+percent+" %");
         return percent;
     }
 
     public void recommendation(double avrg, String brand){
         String recommendation = "";
-        if (avrg >= 0.0){
-            if (avrg >0.0){
-                recommendation = ">>> Наші ціни на бренд - "+brand+" нижчі на "+avrg+" %"+" ---";
+
+        double roundAvrg = ((Math.round(avrg * 100.0)) / 100.0);
+
+        if (avrg >= 0.00){
+            if (avrg >0.00){
+                recommendation = ">>> Наші ціни на бренд - "+brand+" нижчі на "+roundAvrg+" %"+" ніж середні на ринку"+" ---";
+            } else {
+                recommendation = ">>> Наші ціни на бренд - "+brand+" такі ж як "+" середні на ринку"+roundAvrg+" %";
             }
-            else {
-                recommendation = ">>> Наші ціни на бренд - "+brand+" однакові "+avrg+" %"+" ;)";
-            }
-        }
-        else if (avrg <0.0){
-            recommendation = ">>> Наші ціни на бренд - "+brand+" більші на "+Math.abs(avrg)+" %";
+        } else if (avrg <0.00){
+            recommendation = ">>> Наші ціни на бренд - "+brand+" більші на "+Math.abs(roundAvrg)+" %"+" ніж середні на ринку"+" +++";
         }
         System.out.println(recommendation);
     }
@@ -63,30 +63,22 @@ public class BaseTest extends DataCollect {
     }
 
     public void analyze(HashMap<HashMap<String, Double>, String> brandMap, String brandName, double stDeviation){
-        double sumPlus=0;
-        int plus=0;
-        double sumMinus=0;
-        int minus=0;
+        double sumPercent = 0;
+        int count = 0;
 
         for (Map.Entry<HashMap<String, Double>, String> entry : brandMap.entrySet()
                 ) {
             print(entry.getKey(),entry.getValue(),brandName);
-            double avrg = calcuteAvrg(entry.getKey(), brandName, entry.getValue(), stDeviation);
-            if (avrg >= 0){
-                sumPlus += avrg;
-                plus++;
-            }
-            else if (avrg <0){
-                sumMinus += avrg;
-                minus++;
+            Double avrg = calcuteAvrg(entry.getKey(), brandName, entry.getValue(), stDeviation);
+            if (avrg != null){
+                sumPercent += avrg;
+                count++;
             }
         }
 
-        double sumPercent = (sumPlus / plus) + (sumMinus / minus);
-
         System.out.println("");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        recommendation(sumPercent, brandName);
+        recommendation((sumPercent/count), brandName);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("");
     }

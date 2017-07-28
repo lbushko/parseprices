@@ -13,4 +13,5 @@ public class Items {
         public static String signalItem01 = "c-300";
         public static String signalItem02 = "a-148";
         public static String signalItem03 = "long";
+        public static String signalItem04 = "alaras";
 }

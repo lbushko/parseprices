@@ -21,6 +21,7 @@ public class DataCollect {
     static HashMap<String, Double> signalItem01 = new HashMap<String, Double>();
     static HashMap<String, Double> signalItem02 = new HashMap<String, Double>();
     static HashMap<String, Double> signalItem03 = new HashMap<String, Double>();
+    static HashMap<String, Double> signalItem04 = new HashMap<String, Double>();
 
 
     public static void convertMaps2D(){
@@ -36,6 +37,7 @@ public class DataCollect {
         signal.put(signalItem01, Items.signalItem01);
         signal.put(signalItem02, Items.signalItem02);
         signal.put(signalItem03, Items.signalItem03);
+        signal.put(signalItem04, Items.signalItem04);
     }
 
 
@@ -57,7 +59,8 @@ public class DataCollect {
         return new Object[][]{
                 {Items.signalItem01, signalItem01},
                 {Items.signalItem02, signalItem02},
-                {Items.signalItem03, signalItem03}
+                {Items.signalItem03, signalItem03},
+                {Items.signalItem04, signalItem04}
         };
     }
 
